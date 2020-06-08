@@ -137,42 +137,42 @@ class FatSegNet(object):
 
         return high_idx, low_idx
 
-    # def run_view_agg(self,logit_pred):
-    #     model = view_agg(self.view_agg_network.copy())
-    #     model.to(self.device)
-    #
-    #     model_state = torch.load(self.flags['segmentation']['view_agg'], map_location=self.device)
-    #     model.load_state_dict(model_state["model_state_dict"])
-    #     self.logger.info('Model weights loaded from {}'.format(self.flags['segmentation']['view_agg']))
-    #
-    #     tx = ToTensorTest_logits()
-    #     for key in logit_pred.keys():
-    #             logit_pred[key] = plane_swap(logit_pred[key],'axial')
-    #
-    #     model.eval()
-    #     with torch.no_grad():
-    #         axial_batch = tx(logit_pred['axial'])
-    #         axial_batch = axial_batch.unsqueeze(0)
-    #         coronal_batch = tx(logit_pred['coronal'])
-    #         coronal_batch = coronal_batch.unsqueeze(0)
-    #         sagittal_batch = tx(logit_pred['sagittal'])
-    #         sagittal_batch = sagittal_batch.unsqueeze(0)
-    #
-    #         if self.use_cuda:
-    #             axial_batch, coronal_batch, sagittal_batch = axial_batch.cuda(), coronal_batch.cuda(), sagittal_batch.cuda()
-    #
-    #         pred_logits = model(axial_batch, coronal_batch, sagittal_batch)
-    #
-    #         pred_logits = pred_logits.squeeze(dim=0).cpu()
-    #
-    #         pred_logits = pred_logits.permute(1, 2, 3, 0)
-    #         _, y_pred = torch.max(pred_logits, dim=-1)
-    #
-    #         # Change to Numpy
-    #         y_pred = y_pred.numpy()
-    #         y_pred = plane_swap(y_pred, plane='axial', inverse=True)
-    #
-    #     return y_pred
+    def run_view_agg_logits(self,logit_pred):
+        model = view_agg(self.view_agg_network.copy())
+        model.to(self.device)
+
+        model_state = torch.load(self.flags['segmentation']['view_agg'], map_location=self.device)
+        model.load_state_dict(model_state["model_state_dict"])
+        self.logger.info('Model weights loaded from {}'.format(self.flags['segmentation']['view_agg']))
+
+        tx = ToTensorTest_logits()
+        for key in logit_pred.keys():
+                logit_pred[key] = plane_swap(logit_pred[key],'axial')
+
+        model.eval()
+        with torch.no_grad():
+            axial_batch = tx(logit_pred['axial'])
+            axial_batch = axial_batch.unsqueeze(0)
+            coronal_batch = tx(logit_pred['coronal'])
+            coronal_batch = coronal_batch.unsqueeze(0)
+            sagittal_batch = tx(logit_pred['sagittal'])
+            sagittal_batch = sagittal_batch.unsqueeze(0)
+
+            if self.use_cuda:
+                axial_batch, coronal_batch, sagittal_batch = axial_batch.cuda(), coronal_batch.cuda(), sagittal_batch.cuda()
+
+            pred_logits = model(axial_batch, coronal_batch, sagittal_batch)
+
+            pred_logits = pred_logits.squeeze(dim=0).cpu()
+
+            pred_logits = pred_logits.permute(1, 2, 3, 0)
+            _, y_pred = torch.max(pred_logits, dim=-1)
+
+            # Change to Numpy
+            y_pred = y_pred.numpy()
+            y_pred = plane_swap(y_pred, plane='axial', inverse=True)
+
+        return y_pred
 
     def run_view_agg(self,logit_pred):
         pred = []
