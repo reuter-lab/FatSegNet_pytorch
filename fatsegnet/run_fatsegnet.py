@@ -209,8 +209,7 @@ def option_parse():
     FLAGS = {}
     # Segmenation model
     FLAGS['segmentation'] = {}
-    FLAGS['segmentation'][
-        'view_agg'] = '../fatsegnet/checkpoints/segmentation/view_agg/ckpts/Epoch_14_training_state.pkl'
+
     FLAGS['segmentation'][
         'axial'] = '../fatsegnet/checkpoints/segmentation/CDFNet_axial/ckpts/Epoch_40_training_state.pkl'
     FLAGS['segmentation'][
