@@ -26,7 +26,7 @@ The *fatsegnet* directory contains all the source code and modules needed to run
 code can be found in **requirements.txt**. In addition the input data is expected to be a nifti volume with size of [256,224,72], if the scans have a 
 different size they will be crop or padd to the correct size. Additionally 
 the scans have to be arrange as follows (or see [example_data_folder](./example_data_folder), **NOTE** this folder 
-contain a ilustrative example of how images have to organized for FatSegNet to work.
+contain a ilustrative example of how images have to organized for *FatSegNet* to work.
 The Fat and water images scans are empty) :  
 
  ```
